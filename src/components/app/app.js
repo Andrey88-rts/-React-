@@ -1,16 +1,13 @@
 import React from "react";
 import './normalize.css';
 import "./app.css";
+import Header from '../header/Header';
 
 
 export default function App() {
   return (
     <>
-      <header>
-        <h1>Кошелек</h1>
-        <h2>Калькулятор расходов</h2>
-      </header>
-
+      <Header title='Кошелек' subtitle='Калькулятор расходов' />
       <main>
         <div className="container">
           <section className="total">
@@ -69,4 +66,6 @@ export default function App() {
       </main>
     </>
   )
+
 }
+
