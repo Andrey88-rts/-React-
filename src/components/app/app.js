@@ -1,71 +1,63 @@
-import React from "react";
-import './normalize.css';
-import "./app.css";
+import React, { Component } from "react";
 import Header from '../header/Header';
+import Total from '../total/Total';
+import History from '../history/History';
+import Operation from '../operation/Operation';
+
+export default class App extends Component {
+
+  state = {
+    transactions: [],
+    description: '',
+    amount: ''
+  }
+
+  addTransaction = (bool) => {
+    const transactions = [...this.state.transactions];
+
+    transactions.push({
+      id: `cmr${(+new Date).toString(16)}`,
+      description: this.state.description,
+      amount: this.state.amount,
+      bool
+    });
+    this.setState({
+      transactions,
+      description: '',
+      amount: ''
+    });
+  }
+
+  addAmount = (event) => {
+    this.setState({ amount: event.target.value })
+  }
+
+  addDescription = (event) => {
+    this.setState({ description: event.target.value })
+  }
 
 
-export default function App() {
-  return (
-    <>
-      <Header title='Кошелек' subtitle='Калькулятор расходов' />
-      <main>
-        <div className="container">
-          <section className="total">
-            <header className="total__header">
-              <h3>Баланс</h3>
-              <p className="total__balance">0 ₽</p>
-            </header>
-            <div className="total__main">
-              <div className="total__main-item total__income">
-                <h4>Доходы</h4>
-                <p className="total__money total__money-income">
-                  +0 ₽
-                        </p>
-              </div>
-              <div className="total__main-item total__expenses">
-                <h4>Расходы</h4>
-                <p className="total__money total__money-expenses">
-                  -0 ₽
-                        </p>
-              </div>
-            </div>
-          </section>
 
-          <section className="history">
-            <h3>История расходов</h3>
-            <ul className="history__list">
-              <li className="history__item history__item-plus">Получил зарплату
-                        <span className="history__money">+30000 ₽</span>
-                <button className="history__delete">x</button>
-              </li>
-
-              <li className="history__item  history__item-minus">Отдал долг
-                        <span className="history__money">-10000 ₽</span>
-                <button className="history__delete">x</button>
-              </li>
-            </ul>
-          </section>
-
-          <section className="operation">
-            <h3>Новая операция</h3>
-            <form id="form">
-              <label>
-                <input type="text" className="operation__fields operation__name" placeholder="Наименование операции" />
-              </label>
-              <label>
-                <input type="number" className="operation__fields operation__amount" placeholder="Введите сумму" />
-              </label>
-              <div className="operation__btns">
-                <button type="submit" className="operation__btn operation__btn-subtract">РАСХОД</button>
-                <button type="submit" className="operation__btn operation__btn-add">ДОХОД</button>
-              </div>
-
-            </form>
-          </section>
-        </div>
-      </main>
-    </>
-  )
+  render() {
+    return (
+      <>
+        <Header title='Кошелек' subtitle='Калькулятор расходов' />
+        <main>
+          <div className="container">
+            <Total />
+            <History transactions={this.state.transactions} />
+            <Operation
+              addTransaction={this.addTransaction}
+              addAmount={this.addAmount}
+              addDescription={this.addDescription}
+              description={this.state.description}
+              amount={this.state.amount}
+            />
+          </div>
+        </main>
+      </>
+    )
+  }
 
 }
 

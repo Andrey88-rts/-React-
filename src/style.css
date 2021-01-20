@@ -5,7 +5,7 @@
   --main-color: #fff;
   --border-color: #aaa;
   --footer-color: #ddd;
-  --positive-color: olivedrab;
+  --positive-color: rgb(142, 196, 35);
   --negative-color: tomato;
 }
 
@@ -187,6 +187,7 @@ main {
   background-color: var(--footer-color);
   border-radius: 25px;
   padding: 15px 15px;
+  width: 100%;
 }
 
 
