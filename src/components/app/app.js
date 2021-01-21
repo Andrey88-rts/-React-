@@ -7,7 +7,7 @@ import Operation from '../operation/Operation';
 export default class App extends Component {
 
   state = {
-    transactions: [],
+    transactions: JSON.parse(localStorage.getItem('calcMoney1')) || [],
     description: '',
     amount: '',
     resultIncome: 0,
@@ -15,12 +15,20 @@ export default class App extends Component {
     totalBalance: 0
   }
 
+  UNSAFE_componentWillMount() {
+    this.getTotal();
+  }
+
+  componentDidUpdate() {
+    this.addLocalStorage();
+  }
+
   addTransaction = (bool) => {
     const transactions = [...this.state.transactions,
     {
       id: `cmr${(+new Date()).toString(16)}`,
       description: this.state.description,
-      amount: this.state.amount,
+      amount: parseFloat(this.state.amount),
       bool
     }
     ];
@@ -29,11 +37,13 @@ export default class App extends Component {
       transactions,
       description: '',
       amount: ''
-    }, this.getTotal);
+    },
+      this.getTotal
+    );
   }
 
   addAmount = (event) => {
-    this.setState({ amount: parseFloat(event.target.value) })
+    this.setState({ amount: event.target.value })
   }
 
   addDescription = (event) => {
@@ -62,6 +72,16 @@ export default class App extends Component {
     })
   }
 
+
+  addLocalStorage() {
+    localStorage.setItem('calcMoney1', JSON.stringify(this.state.transactions));
+  }
+
+  delTransaction = (id) => {
+    const transactions = this.state.transactions.filter(item => item.id !== id);
+    this.setState({ transactions }, this.getTotal);
+  }
+
   render() {
     return (
       <>
@@ -71,7 +91,9 @@ export default class App extends Component {
             <Total resultExpenses={this.state.resultExpenses}
               resultIncome={this.state.resultIncome}
               totalBalance={this.state.totalBalance} />
-            <History transactions={this.state.transactions} />
+            <History
+              transactions={this.state.transactions}
+              delTransaction={this.delTransaction} />
             <Operation
               addTransaction={this.addTransaction}
               addAmount={this.addAmount}
